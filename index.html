@@ -51,26 +51,32 @@
     }
 
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(5, 8, 22, 0.75);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
+  position: relative;
+  z-index: 50;
+  background: #050816;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
 
-    .nav {
-      min-height: 92px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
+.nav {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
 
-    .brand {
-      display: flex;
-      align-items: center;
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.brand img {
+  width: 180px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+}
 
     .brand img {
       width: 250px;
