@@ -17,25 +17,23 @@
 
     :root {
       --bg: #050816;
-      --bg-soft: #0b1020;
-      --card: rgba(14, 22, 45, 0.72);
-      --card-border: rgba(255, 255, 255, 0.08);
       --text: #f8fafc;
       --muted: #94a3b8;
       --blue: #2563eb;
-      --blue-2: #38bdf8;
+      --blue2: #38bdf8;
       --green: #22c55e;
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-      --radius: 22px;
+      --card: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
       --max: 1180px;
     }
 
     body {
-      font-family: Inter, Arial, Helvetica, sans-serif;
+      font-family: Inter, Arial, sans-serif;
       background:
         radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 25%),
-        radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 20%),
-        linear-gradient(180deg, #040816 0%, #060b18 40%, #040714 100%);
+        radial-gradient(circle at top right, rgba(56, 189, 248, 0.10), transparent 20%),
+        linear-gradient(180deg, #040816 0%, #060b18 45%, #040714 100%);
       color: var(--text);
       line-height: 1.5;
     }
@@ -56,13 +54,13 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(5, 8, 22, 0.7);
+      background: rgba(5, 8, 22, 0.75);
       backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
     .nav {
-      min-height: 82px;
+      min-height: 92px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -72,7 +70,6 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
     }
 
     .brand img {
@@ -80,24 +77,16 @@
       height: 60px;
       object-fit: contain;
       display: block;
-      filter: drop-shadow(0 0 18px rgba(37, 99, 235, 0.25));
     }
 
     .nav-links {
       display: flex;
-      align-items: center;
       gap: 28px;
       color: #dbeafe;
       font-size: 15px;
     }
 
-    .nav-links a {
-      opacity: 0.9;
-      transition: 0.2s ease;
-    }
-
     .nav-links a:hover {
-      opacity: 1;
       color: white;
     }
 
@@ -120,14 +109,13 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
       min-height: 48px;
       padding: 0 22px;
       border-radius: 14px;
       font-weight: 700;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-      cursor: pointer;
+      transition: 0.2s ease;
       border: none;
+      cursor: pointer;
     }
 
     .btn:hover {
@@ -147,7 +135,7 @@
     }
 
     .hero {
-      padding: 80px 0 46px;
+      padding: 80px 0 50px;
     }
 
     .hero-wrap {
@@ -158,9 +146,7 @@
     }
 
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+      display: inline-block;
       padding: 10px 14px;
       margin-bottom: 22px;
       border-radius: 999px;
@@ -201,30 +187,12 @@
       font-size: 14px;
     }
 
-    .hero-note span {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .hero-card {
-      position: relative;
       background: linear-gradient(180deg, rgba(10, 18, 38, 0.95), rgba(8, 13, 28, 0.9));
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--border);
       border-radius: 28px;
       padding: 26px;
       box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .hero-card::before {
-      content: "";
-      position: absolute;
-      inset: auto -60px -80px auto;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.22), transparent 65%);
-      pointer-events: none;
     }
 
     .mini-top {
@@ -315,8 +283,7 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue-2), var(--blue));
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+      background: linear-gradient(135deg, var(--blue2), var(--blue));
     }
 
     .muted {
@@ -334,7 +301,7 @@
     }
 
     .stat-card {
-      background: rgba(255,255,255,0.03);
+      background: var(--card);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 22px;
       padding: 24px;
@@ -417,7 +384,7 @@
     }
 
     .step-card {
-      background: rgba(255,255,255,0.03);
+      background: var(--card);
       border: 1px solid rgba(255,255,255,0.06);
       border-radius: 24px;
       padding: 26px;
@@ -430,7 +397,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--blue), var(--blue-2));
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
       font-weight: 800;
       margin-bottom: 18px;
     }
@@ -450,8 +417,6 @@
     }
 
     .cta-box {
-      position: relative;
-      overflow: hidden;
       border-radius: 30px;
       padding: 40px;
       background:
@@ -497,10 +462,10 @@
     }
 
     .footer-left img {
-      width: 170px;
-      height: auto;
+      width: 250px;
+      height: 60px;
       object-fit: contain;
-      opacity: 0.95;
+      display: block;
     }
 
     .footer-links {
@@ -550,8 +515,8 @@
       }
 
       .brand img {
-        width: 220px;
-        height: auto;
+        width: 250px;
+        height: 60px;
       }
 
       .hero {
@@ -586,6 +551,11 @@
         width: 100%;
         justify-content: center;
       }
+
+      .footer-left img {
+        width: 250px;
+        height: 60px;
+      }
     }
   </style>
 </head>
@@ -593,7 +563,7 @@
   <header class="topbar">
     <div class="container nav">
       <div class="brand">
-        <img src="logo.png" style="width:250px !important; height:60px !important; object-fit:contain;" />
+        <img src="logo.png" alt="PFLX Pay Logo" />
       </div>
 
       <nav class="nav-links">
@@ -805,7 +775,7 @@
   <footer class="footer">
     <div class="container footer-wrap">
       <div class="footer-left">
-        <img src="logo.png" style="width:250px; height:60px; object-fit:contain;" />
+        <img src="logo.png" alt="PFLX Pay" />
         <span>© 2026 PFLX Pay. All rights reserved.</span>
       </div>
 
