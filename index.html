@@ -1,791 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PFLX Pay — Get paid globally in minutes</title>
-  <meta
-    name="description"
-    content="PFLX Pay helps freelancers, creators, and teams create payment links, receive crypto instantly, and split payouts automatically."
-  />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #050816;
-      --bg2: #0a1020;
-      --card: rgba(255, 255, 255, 0.04);
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --blue: #2563eb;
-      --blue2: #38bdf8;
-      --max: 1240px;
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-    }
-
-    body {
-      font-family: Inter, Arial, sans-serif;
-      color: var(--text);
-    body {
-      background:
-        radial-gradient(circle at top left, rgba(37,99,235,0.12), transparent 15%),
-        radial-gradient(circle at top right, rgba(56,189,248,0.08), transparent 12%),
-        linear-gradient(180deg, #040816 0%, #060b18 20%, #040714 100%);
-    }
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      width: 100%;
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-    .topbar {
-      padding: 0;
-     }
-    .topbar {
-      background: rgba(5, 8, 22, 0.96);
-      border-bottom: 1px solid rgba(255,255,255,0.02);
-    }
-
-    .nav {
-      min-height: 60px;
-      display: grid;
-      grid-template-columns: 320px 1fr 320px;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      min-width: 0;
-    }
-
-    .brand img {
-      width: 280px;
-      height: auto;
-      display: block;
-      object-fit: contain;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 34px;
-      font-size: 15px;
-      color: #dbeafe;
-      white-space: nowrap;
-    }
-
-    .nav-links a:hover {
-      color: white;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 14px;
-      min-width: 0;
-    }
-
-    .lang-badge {
-      padding: 10px 16px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 13px;
-      background: rgba(255,255,255,0.03);
-      white-space: nowrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 50px;
-      padding: 0 24px;
-      border-radius: 16px;
-      font-weight: 700;
-      border: none;
-      transition: 0.2s ease;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--blue), #3b82f6);
-      color: white;
-      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.32);
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.09);
-      color: white;
-    }
-
-    .hero {
-      padding: 0px 0 20px;
-    }
-    .hero {
-      background: linear-gradient(
-        to bottom,
-        rgba(5,8,22,0) 0%,
-        rgba(5,8,22,0.6) 60%,
-        rgba(5,8,22,1) 100%
-     );
-    }
-    .hero-wrap {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(380px, 0.9fr);
-      gap: 40px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      padding: 10px 14px;
-      margin-bottom: 20px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.08);
-      border: 1px solid rgba(56, 189, 248, 0.18);
-      color: #bae6fd;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .hero h1 {
-      font-size: 60px;
-      line-height: 1.05;
-      letter-spacing: -1.7px;
-      margin-bottom: 18px;
-      max-width: 760px;
-    }
-
-    .hero p {
-      font-size: 20px;
-      color: var(--muted);
-      max-width: 680px;
-      margin-bottom: 28px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .hero-note {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      color: #cbd5e1;
-      font-size: 14px;
-    }
-
-    .hero-card {
-      background: linear-gradient(180deg, rgba(10,18,38,0.96), rgba(8,13,28,0.92));
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 26px;
-      box-shadow: var(--shadow);
-    }
-
-    .mini-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      color: #cbd5e1;
-      font-size: 14px;
-    }
-
-    .status {
-      padding: 8px 12px;
-      background: rgba(34,197,94,0.12);
-      color: #86efac;
-      border: 1px solid rgba(34,197,94,0.18);
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 12px;
-    }
-
-    .payment-box {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-
-    .payment-label {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    .payment-title {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-
-    .amount-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .amount {
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-
-    .coin {
-      color: #93c5fd;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: rgba(37,99,235,0.14);
-      border: 1px solid rgba(37,99,235,0.18);
-    }
-
-    .split-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .split-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .split-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue2), var(--blue));
-    }
-
-    .muted {
-      color: var(--muted);
-    }
-
-    .stats {
-      padding: 10px 0 74px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 22px;
-      padding: 24px;
-      box-shadow: var(--shadow);
-    }
-
-    .stat-number {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-
-    .stat-text {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .section {
-      padding: 10px 0 80px;
-    }
-
-    .section-head {
-      text-align: center;
-      max-width: 760px;
-      margin: 0 auto 38px;
-    }
-
-    .section-head h2 {
-      font-size: 42px;
-      letter-spacing: -1px;
-      margin-bottom: 12px;
-    }
-
-    .section-head p {
-      color: var(--muted);
-      font-size: 18px;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-    }
-
-    .feature-card {
-      background: linear-gradient(180deg, rgba(12,19,37,0.96), rgba(10,15,28,0.95));
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 24px;
-      padding: 26px;
-      box-shadow: var(--shadow);
-    }
-
-    .feature-icon {
-      width: 54px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 16px;
-      font-size: 24px;
-      margin-bottom: 18px;
-      background: linear-gradient(135deg, rgba(37,99,235,0.22), rgba(56,189,248,0.16));
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .feature-card h3 {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
-    .feature-card p {
-      color: var(--muted);
-      font-size: 16px;
-    }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .step-card {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 24px;
-      padding: 26px;
-    }
-
-    .step-number {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--blue), var(--blue2));
-      font-weight: 800;
-      margin-bottom: 18px;
-    }
-
-    .step-card h3 {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
-    .step-card p {
-      color: var(--muted);
-      font-size: 16px;
-    }
-
-    .cta {
-      padding-bottom: 90px;
-    }
-
-    .cta-box {
-      border-radius: 30px;
-      padding: 40px;
-      background:
-        radial-gradient(circle at right top, rgba(56,189,248,0.18), transparent 28%),
-        linear-gradient(135deg, rgba(37,99,235,0.18), rgba(8,13,28,0.96));
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: var(--shadow);
-      text-align: center;
-    }
-
-    .cta-box h2 {
-      font-size: 42px;
-      margin-bottom: 12px;
-      letter-spacing: -1px;
-    }
-
-    .cta-box p {
-      color: var(--muted);
-      font-size: 18px;
-      max-width: 760px;
-      margin: 0 auto 24px;
-    }
-
-    .footer {
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 28px 0 34px;
-    }
-
-    .footer-wrap {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .footer-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .footer-left img {
-      width: 220px;
-      height: auto;
-      display: block;
-      object-fit: contain;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .footer-links a:hover {
-      color: white;
-    }
-
-    @media (max-width: 1100px) {
-      .nav {
-        grid-template-columns: 260px 1fr 260px;
-      }
-
-      .brand img {
-        width: 230px;
-      }
-
-      .hero-wrap,
-      .stats-grid,
-      .features-grid,
-      .steps-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h1 {
-        font-size: 50px;
-      }
-    }
-
-    @media (max-width: 820px) {
-      .nav {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 16px 0;
-        gap: 14px;
-      }
-
-      .brand {
-        justify-content: center;
-        width: 100%;
-      }
-
-      .brand img {
-        width: 220px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .nav-actions {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .hero {
-        padding: 34px 0 40px;
-      }
-
-      .hero h1 {
-        font-size: 38px;
-      }
-
-      .hero p,
-      .section-head p,
-      .cta-box p {
-        font-size: 16px;
-      }
-
-      .section-head h2,
-      .cta-box h2 {
-        font-size: 30px;
-      }
-
-      .cta-box {
-        padding: 28px 20px;
-      }
-
-      .footer-left,
-      .footer-links {
-        width: 100%;
-        justify-content: center;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PFLX Pay</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:Arial, sans-serif;
+  background:#050816;
+  color:#fff;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 40px;
+  background:#050816;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.logo img{
+  height:50px;
+}
+
+.menu{
+  display:flex;
+  gap:30px;
+  color:#ccc;
+}
+
+.right{
+  display:flex;
+  gap:15px;
+  align-items:center;
+}
+
+.btn{
+  padding:10px 18px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+.btn.primary{
+  background:#2563eb;
+}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:40px 20px;
+}
+
+.hero h1{
+  font-size:48px;
+  margin-bottom:15px;
+}
+
+.hero p{
+  color:#aaa;
+  margin-bottom:25px;
+}
+
+.hero button{
+  padding:14px 26px;
+  border:none;
+  border-radius:12px;
+  background:#2563eb;
+  color:white;
+  font-size:16px;
+}
+
+/* CARD */
+.card{
+  margin:40px auto;
+  width:320px;
+  padding:20px;
+  border-radius:20px;
+  background:#0b1220;
+  border:1px solid rgba(255,255,255,0.08);
+}
+</style>
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="container nav">
-      <div class="brand">
-        <img src="logo.png" alt="PFLX Pay Logo" />
-      </div>
 
-      <nav class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#use-cases">Use cases</a>
-      </nav>
+<div class="header">
+  <div class="logo">
+    <img src="logo.png">
+  </div>
 
-      <div class="nav-actions">
-        <div class="lang-badge">EN • TR • RU</div>
-        <a href="#cta" class="btn btn-secondary">Join Waitlist</a>
-      </div>
-    </div>
-  </header>
+  <div class="menu">
+    <span>Features</span>
+    <span>How it works</span>
+    <span>Use cases</span>
+  </div>
 
-  <main>
-    <section class="hero">
-      <div class="container hero-wrap">
-        <div>
-          <div class="eyebrow">⚡ Built for freelancers, creators, and global teams</div>
-          <h1>Get paid globally in minutes.</h1>
-          <p>
-            Create payment links, receive crypto instantly, and split payouts automatically
-            with a faster, cleaner payment flow for modern online businesses.
-          </p>
+  <div class="right">
+    <span>EN • TR • RU</span>
+    <div class="btn primary">Join</div>
+  </div>
+</div>
 
-          <div class="hero-buttons">
-            <a href="#cta" class="btn btn-primary">Start Now</a>
-            <a href="#features" class="btn btn-secondary">See Features</a>
-          </div>
+<div class="hero">
+  <h1>Get paid globally</h1>
+  <p>Simple crypto payments for freelancers</p>
+  <button>Start Now</button>
+</div>
 
-          <div class="hero-note">
-            <span>✅ Instant settlements</span>
-            <span>✅ Flexible team payouts</span>
-            <span>✅ Global payment access</span>
-          </div>
-        </div>
+<div class="card">
+  Payment Preview
+</div>
 
-        <div class="hero-card">
-          <div class="mini-top">
-            <span>Payment Preview</span>
-            <span class="status">Live concept</span>
-          </div>
-
-          <div class="payment-box">
-            <div class="payment-label">Invoice</div>
-            <div class="payment-title">Brand Identity Package</div>
-
-            <div class="amount-row">
-              <div class="amount">$1,250</div>
-              <div class="coin">USDT</div>
-            </div>
-
-            <div class="split-list">
-              <div class="split-item">
-                <div class="split-left">
-                  <span class="dot"></span>
-                  <div>
-                    <strong>Lead Designer</strong><br />
-                    <span class="muted">Main payout</span>
-                  </div>
-                </div>
-                <strong>70%</strong>
-              </div>
-
-              <div class="split-item">
-                <div class="split-left">
-                  <span class="dot"></span>
-                  <div>
-                    <strong>Creative Partner</strong><br />
-                    <span class="muted">Automatic split</span>
-                  </div>
-                </div>
-                <strong>30%</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="muted" style="font-size: 14px;">
-            Clean checkout flows, instant crypto settlement, and simple payout sharing in one experience.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="stats">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-number">3x</div>
-            <div class="stat-text">Faster payment setup with shareable payment links</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">24/7</div>
-            <div class="stat-text">Always-on global access for remote teams and clients</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">1 link</div>
-            <div class="stat-text">One simple flow to collect and split payments instantly</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">Multi-lang</div>
-            <div class="stat-text">English first, with Turkish and Russian support planned</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="features">
-      <div class="container">
-        <div class="section-head">
-          <h2>Everything you need to get paid smarter</h2>
-          <p>
-            Built to make global payments simpler for solo professionals, digital creators,
-            agencies, and internet-native teams.
-          </p>
-        </div>
-
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">🔗</div>
-            <h3>Payment Links</h3>
-            <p>Create a clean payment link in seconds and send it to clients anywhere in the world.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">⚡</div>
-            <h3>Instant Crypto Payments</h3>
-            <p>Receive payments faster with modern crypto rails designed for online business.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🔀</div>
-            <h3>Automatic Split Payouts</h3>
-            <p>Split incoming payments between team members automatically with clear percentages.</p>
-          </div>
-
-          <div class="feature-card" id="use-cases">
-            <div class="feature-icon">🌍</div>
-            <h3>Global by Default</h3>
-            <p>Designed for international work, borderless payments, and remote-first teams.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="how-it-works">
-      <div class="container">
-        <div class="section-head">
-          <h2>How it works</h2>
-          <p>A faster flow for creating, sharing, receiving, and distributing payments.</p>
-        </div>
-
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <h3>Create</h3>
-            <p>Set your amount, choose your payout structure, and generate a payment link.</p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <h3>Share</h3>
-            <p>Send the link to your client, customer, or partner with a clean checkout flow.</p>
-          </div>
-
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <h3>Receive & Split</h3>
-            <p>Get paid instantly and distribute funds automatically across your team.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cta" id="cta">
-      <div class="container">
-        <div class="cta-box">
-          <h2>The future of global payments starts here.</h2>
-          <p>
-            PFLX Pay is building a cleaner way to help digital businesses collect crypto payments
-            and manage simple payout flows across borders.
-          </p>
-          <div class="hero-buttons" style="justify-content: center; margin-bottom: 0;">
-            <a href="mailto:hello@getpflxpay.com" class="btn btn-primary">Request Early Access</a>
-            <a href="#features" class="btn btn-secondary">Explore Product</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-wrap">
-      <div class="footer-left">
-        <img src="logo.png" alt="PFLX Pay" />
-        <span>© 2026 PFLX Pay. All rights reserved.</span>
-      </div>
-
-      <div class="footer-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="mailto:hello@getpflxpay.com">Contact</a>
-      </div>
-    </div>
-  </footer>
 </body>
 </html>
