@@ -135,12 +135,41 @@
       font-size: 14px;
       word-break: break-all;
       margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .qr-box {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #050816;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .qr-box img {
+      width: 220px;
+      height: 220px;
+      border-radius: 12px;
+      background: white;
+      padding: 10px;
+    }
+
+    .qr-note {
+      color: #94a3b8;
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.6;
     }
 
     .button-row {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      margin-top: 16px;
     }
 
     .button-row button,
@@ -217,6 +246,11 @@
       .button-row a {
         width: 100%;
       }
+
+      .qr-box img {
+        width: 180px;
+        height: 180px;
+      }
     }
   </style>
 </head>
@@ -228,7 +262,7 @@
 
   <div class="wrapper">
     <div class="payment-card">
-      <div class="badge">Payment Request</div>
+      <div class="badge">TRC20 Payment Request</div>
       <h1 id="title">Payment Request</h1>
       <p class="description" id="description">
         This payment request was generated with PFLX Pay.
@@ -246,15 +280,20 @@
         </div>
 
         <div class="meta-card">
-          <div class="meta-label">Status</div>
-          <div class="meta-value">Awaiting payment</div>
+          <div class="meta-label">Network</div>
+          <div class="meta-value">TRC20 (TRON)</div>
         </div>
       </div>
 
       <div class="wallet-box">
         <h3>Send payment to wallet</h3>
-        <div class="wallet-address" id="walletAddress">
-          0x1234567890abcdef1234567890abcdef12345678
+        <div class="wallet-address" id="walletAddress">TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK</div>
+
+        <div class="qr-box">
+          <img id="qrImage" src="" alt="Wallet QR Code" />
+          <div class="qr-note">
+            Scan this QR code to copy the wallet address faster in supported apps.
+          </div>
         </div>
 
         <div class="button-row">
@@ -266,8 +305,7 @@
       </div>
 
       <div class="note">
-        This is an MVP payment request page. In the next step, we can connect this to a real wallet,
-        QR code, or on-chain payment flow.
+        Please send the exact amount using the TRC20 network only. Sending funds on the wrong network may result in permanent loss.
       </div>
     </div>
   </div>
@@ -283,15 +321,19 @@
     const currency = params.get("currency") || "USDT";
     const title = params.get("title") || "Payment Request";
     const description = params.get("description") || "This payment request was generated with PFLX Pay.";
+    const walletAddress = "TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK";
 
     document.getElementById("amount").textContent = amount + " " + currency;
     document.getElementById("currency").textContent = currency;
     document.getElementById("title").textContent = title;
     document.getElementById("description").textContent = description;
+    document.getElementById("walletAddress").textContent = walletAddress;
+
+    const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(walletAddress);
+    document.getElementById("qrImage").src = qrUrl;
 
     function copyWallet() {
-      const wallet = document.getElementById("walletAddress").textContent.trim();
-      navigator.clipboard.writeText(wallet).then(() => {
+      navigator.clipboard.writeText(walletAddress).then(() => {
         document.getElementById("copyMessage").textContent = "✅ Wallet address copied.";
       }).catch(() => {
         document.getElementById("copyMessage").textContent = "Copy failed. Please copy manually.";
