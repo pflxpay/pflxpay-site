@@ -10,7 +10,7 @@
 
 body{
   font-family:Arial, sans-serif;
-  background:#050816;
+  background:#050816; /* sitenin ana rengi */
   color:#fff;
 }
 
@@ -19,12 +19,19 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:15px 40px;
+  padding:16px 40px;
 }
 
-/* LOGO */
+/* LOGO (RENKLERİ BOZMADAN) */
+.logo{
+  background:#050816;      /* siyahı sitenin rengine eşitledik */
+  padding:6px 10px;        /* kenar boşluğu */
+  border-radius:8px;       /* hafif yumuşatma */
+}
+
 .logo img{
-  height:90px;
+  height:70px;             /* BÜYÜK ve net */
+  display:block;
 }
 
 /* MENU */
@@ -73,8 +80,7 @@ body{
 
 <div class="header">
   <div class="logo">
-    <!-- 🔥 BURASI ÇÖZÜM -->
-    <img src="logo.png" style="height:90px; filter: brightness(0) invert(1);">
+    <img src="logo.png" alt="pflxpay">
   </div>
 
   <div class="menu">
