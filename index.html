@@ -1,282 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PFLX Pay</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PFLX Pay</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:#050816;
-  color:#fff;
-}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #050816;
+      color: #fff;
+    }
 
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:16px 60px;
-}
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 40px;
+      gap: 20px;
+    }
 
-.logo img{
-  height:70px;
-  width:auto;
-  display:block;
-}
+    .logo img {
+      height: 70px;
+      width: auto;
+      display: block;
+    }
 
-.menu{
-  display:flex;
-  gap:40px;
-  align-items:center;
-  color:#cbd5e1;
-  font-size:15px;
-}
+    .menu {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      color: #cbd5e1;
+      font-size: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-.menu span,.menu a{
-  cursor:pointer;
-  transition:0.2s;
-  color:#cbd5e1;
-  text-decoration:none;
-}
+    .menu a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: 0.2s;
+    }
 
-.menu span:hover,.menu a:hover{
-  color:#fff;
-}
+    .menu a:hover {
+      color: #fff;
+    }
 
-.btn{
-  padding:10px 18px;
-  border-radius:10px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-}
+    .btn-link {
+      padding: 10px 18px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
 
-.hero{
-  text-align:center;
-  margin-top:70px;
-  padding:0 20px;
-}
+    .hero {
+      text-align: center;
+      margin-top: 70px;
+      padding: 0 20px;
+    }
 
-.hero h1{
-  font-size:56px;
-  font-weight:700;
-}
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 700;
+    }
 
-.hero p{
-  color:#94a3b8;
-  margin:18px 0 30px;
-  font-size:18px;
-}
+    .hero p {
+      color: #94a3b8;
+      margin: 18px 0 30px;
+      font-size: 18px;
+    }
 
-.hero button{
-  padding:14px 28px;
-  border:none;
-  border-radius:12px;
-  background:#2563eb;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-}
+    .hero button {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-.card{
-  margin:60px auto 30px auto;
-  width:380px;
-  padding:30px;
-  border-radius:20px;
-  background:#0b1220;
-  text-align:center;
-  color:#cbd5e1;
-  border:1px solid rgba(255,255,255,0.06);
-}
+    .card {
+      margin: 60px auto 30px auto;
+      width: 380px;
+      max-width: calc(100% - 32px);
+      padding: 30px;
+      border-radius: 20px;
+      background: #0b1220;
+      text-align: center;
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
 
-.waitlist{
-  margin:40px auto 80px auto;
-  width:100%;
-  max-width:520px;
-  padding:28px;
-  border-radius:20px;
-  background:#0b1220;
-  border:1px solid rgba(255,255,255,0.06);
-  text-align:center;
-}
+    .waitlist {
+      margin: 40px auto 80px auto;
+      width: 100%;
+      max-width: 560px;
+      padding: 28px;
+      border-radius: 20px;
+      background: #0b1220;
+      border: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+    }
 
-.waitlist h2{
-  font-size:28px;
-  margin-bottom:10px;
-}
+    .waitlist h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
 
-.waitlist p{
-  color:#94a3b8;
-  margin-bottom:20px;
-}
+    .waitlist p {
+      color: #94a3b8;
+      margin-bottom: 20px;
+    }
 
-.form-row{
-  display:flex;
-  gap:12px;
-}
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
 
-.form-row input{
-  flex:1;
-  height:52px;
-  padding:0 16px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.1);
-  background:#050816;
-  color:#fff;
-  outline:none;
-  font-size:15px;
-}
+    .form-row input {
+      flex: 1;
+      height: 52px;
+      padding: 0 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #050816;
+      color: #fff;
+      outline: none;
+      font-size: 15px;
+    }
 
-.form-row button{
-  height:52px;
-  padding:0 20px;
-  border:none;
-  border-radius:12px;
-  background:#2563eb;
-  color:#fff;
-  font-size:15px;
-  cursor:pointer;
-}
+    .form-row button {
+      height: 52px;
+      padding: 0 20px;
+      border: none;
+      border-radius: 12px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
 
-.message{
-  margin-top:14px;
-  color:#22c55e;
-  min-height:20px;
-  font-size:14px;
-}
+    .footer {
+      text-align: center;
+      color: #64748b;
+      padding: 0 20px 40px;
+      font-size: 14px;
+    }
 
-.footer{
-  text-align:center;
-  color:#64748b;
-  padding:0 20px 40px;
-  font-size:14px;
-}
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 20px;
+        flex-direction: column;
+      }
 
-@media(max-width:768px){
-  .header{
-    padding:16px 20px;
-    flex-direction:column;
-    gap:16px;
-  }
+      .logo img {
+        height: 56px;
+      }
 
-  .menu{
-    gap:16px;
-    font-size:13px;
-    flex-wrap:wrap;
-    justify-content:center;
-  }
+      .menu {
+        gap: 16px;
+        font-size: 13px;
+      }
 
-  .logo img{
-    height:52px;
-  }
+      .hero {
+        margin-top: 40px;
+      }
 
-  .hero{
-    margin-top:40px;
-  }
+      .hero h1 {
+        font-size: 36px;
+      }
 
-  .hero h1{
-    font-size:36px;
-  }
+      .hero p {
+        font-size: 16px;
+      }
 
-  .hero p{
-    font-size:16px;
-  }
+      .waitlist,
+      .card {
+        width: calc(100% - 24px);
+      }
 
-  .card{
-    width:92%;
-  }
+      .form-row {
+        flex-direction: column;
+      }
 
-  .waitlist{
-    width:92%;
-    padding:20px;
-  }
-
-  .form-row{
-    flex-direction:column;
-  }
-
-  .form-row button,
-  .form-row input{
-    width:100%;
-  }
-}
-</style>
+      .form-row button,
+      .form-row input {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="logo">
-    <img src="logo.png" alt="PFLX Pay Logo">
+  <div class="header">
+    <div class="logo">
+      <img src="logo.png" alt="PFLX Pay Logo" />
+    </div>
+
+    <div class="menu">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#waitlist" class="btn-link">Join Waitlist</a>
+    </div>
   </div>
 
-  <div class="menu">
-    <a href="#features">Features</a>
-    <a href="#how">How it works</a>
-    <a href="#waitlist" class="btn">Join Waitlist</a>
-  </div>
-</div>
-
-<div class="hero">
-  <h1>Get paid globally</h1>
-  <p>Simple crypto payments for freelancers</p>
-  <button onclick="scrollToWaitlist()">Start Now</button>
-</div>
-
-<div class="card" id="features">
-  Payment Preview
-</div>
-
-<div class="waitlist" id="waitlist">
-  <h2>Join the waitlist</h2>
-  <p>Be the first to know when PFLX Pay launches.</p>
-
-  <div class="form-row">
-    <input type="email" id="emailInput" placeholder="Enter your email">
-    <button onclick="joinWaitlist()">Join</button>
+  <div class="hero">
+    <h1>Get paid globally</h1>
+    <p>Simple crypto payments for freelancers</p>
+    <button onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">
+      Start Now
+    </button>
   </div>
 
-  <div class="message" id="messageBox"></div>
-</div>
+  <div class="card" id="features">
+    Payment Preview
+  </div>
 
-<div class="footer" id="how">
-  PFLX Pay © 2026
-</div>
+  <div class="waitlist" id="waitlist">
+    <h2>Join the waitlist</h2>
+    <p>Be the first to know when PFLX Pay launches.</p>
 
-<script>
-function scrollToWaitlist() {
-  document.getElementById("waitlist").scrollIntoView({ behavior: "smooth" });
-}
+    <form action="https://formspree.io/f/mdaywzgk" method="POST">
+      <div class="form-row">
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <button type="submit">Join</button>
+      </div>
+    </form>
+  </div>
 
-function joinWaitlist() {
-  const emailInput = document.getElementById("emailInput");
-  const messageBox = document.getElementById("messageBox");
-  const email = emailInput.value.trim();
-
-  if (!email) {
-    messageBox.style.color = "#ef4444";
-    messageBox.textContent = "Please enter your email.";
-    return;
-  }
-
-  const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-  if (!emailPattern.test(email)) {
-    messageBox.style.color = "#ef4444";
-    messageBox.textContent = "Please enter a valid email address.";
-    return;
-  }
-
-  let waitlist = JSON.parse(localStorage.getItem("pflx_waitlist") || "[]");
-  if (!waitlist.includes(email)) {
-    waitlist.push(email);
-    localStorage.setItem("pflx_waitlist", JSON.stringify(waitlist));
-  }
-
-  messageBox.style.color = "#22c55e";
-  messageBox.textContent = "You have been added to the waitlist.";
-  emailInput.value = "";
-}
-</script>
+  <div class="footer" id="how">
+    PFLX Pay © 2026
+  </div>
 
 </body>
 </html>
