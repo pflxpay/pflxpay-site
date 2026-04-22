@@ -361,63 +361,63 @@
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
 
-    const amount = params.get("amount") || "0";
-    const currency = params.get("currency") || "USDT";
-    const title = params.get("title") || "Payment Request";
-    const description = params.get("description") || "This payment request was generated with PFLX Pay.";
-    const walletAddress = "TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK";
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbzhPnamX09dY0FuVfV4cvkkmF4FC9zwbR4hlFvYegEK6ViSLmPRFmYmFTjqtonr5XQ/exec";
+  const amount = params.get("amount") || "0";
+  const currency = params.get("currency") || "USDT";
+  const title = params.get("title") || "Payment Request";
+  const description = params.get("description") || "This payment request was generated with PFLX Pay.";
+  const walletAddress = "TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK";
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbzhPnamX09dY0FuVfV4cvkkmF4FC9zwbR4hlFvYegEK6ViSLmPRFmYmFTjqtonr5XQ/exec";
 
-    document.getElementById("amount").textContent = amount + " " + currency;
-    document.getElementById("currency").textContent = currency;
-    document.getElementById("title").textContent = title;
-    document.getElementById("description").textContent = description;
-    document.getElementById("walletAddress").textContent = walletAddress;
+  document.getElementById("amount").textContent = amount + " " + currency;
+  document.getElementById("currency").textContent = currency;
+  document.getElementById("title").textContent = title;
+  document.getElementById("description").textContent = description;
+  document.getElementById("walletAddress").textContent = walletAddress;
 
-    const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(walletAddress);
-    document.getElementById("qrImage").src = qrUrl;
+  const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(walletAddress);
+  document.getElementById("qrImage").src = qrUrl;
 
-    function copyWallet() {
-      navigator.clipboard.writeText(walletAddress).then(() => {
-        document.getElementById("copyMessage").textContent = "✅ Wallet address copied.";
-      }).catch(() => {
-        document.getElementById("copyMessage").textContent = "Copy failed. Please copy manually.";
+  function copyWallet() {
+    navigator.clipboard.writeText(walletAddress).then(() => {
+      document.getElementById("copyMessage").textContent = "✅ Wallet address copied.";
+    }).catch(() => {
+      document.getElementById("copyMessage").textContent = "Copy failed. Please copy manually.";
+    });
+  }
+
+  async function markAsPaid() {
+    const ref = "PFLX-" + Date.now();
+
+    const payload = {
+      reference: ref,
+      amount: amount,
+      currency: currency,
+      title: title,
+      description: description,
+      wallet: walletAddress
+    };
+
+    try {
+      await fetch(scriptUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
       });
+
+      document.getElementById("statusBox").style.display = "block";
+      document.getElementById("referenceId").textContent = "Reference ID: " + ref;
+      document.getElementById("copyMessage").textContent = "✅ Payment notification sent.";
+      document.getElementById("statusBox").scrollIntoView({ behavior: "smooth" });
+    } catch (error) {
+      document.getElementById("copyMessage").textContent = "Connection error. Please try again.";
     }
-
-    async function markAsPaid() {
-      const ref = "PFLX-" + Date.now();
-
-      const payload = {
-        reference: ref,
-        amount: amount,
-        currency: currency,
-        title: title,
-        description: description,
-        wallet: walletAddress
-      };
-
-      try {
-        await fetch(scriptUrl, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        document.getElementById("statusBox").style.display = "block";
-        document.getElementById("referenceId").textContent = "Reference ID: " + ref;
-        document.getElementById("copyMessage").textContent = "✅ Payment notification sent.";
-        document.getElementById("statusBox").scrollIntoView({ behavior: "smooth" });
-      } catch (error) {
-        document.getElementById("copyMessage").textContent = "Connection error. Please try again.";
-      }
-    }
-  </script>
+  }
+</script>
 
 </body>
 </html>
