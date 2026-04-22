@@ -345,7 +345,7 @@
       <div class="status-box" id="statusBox">
         <div class="status-title">Payment Submitted</div>
         <div class="status-text">
-          Your payment has been marked as submitted. The merchant will review the transfer and confirm it manually.
+          Your payment has been submitted successfully. The merchant has been notified by email and the payment record has been added to the admin sheet.
         </div>
         <div class="reference-box" id="referenceId"></div>
       </div>
@@ -368,6 +368,7 @@
     const title = params.get("title") || "Payment Request";
     const description = params.get("description") || "This payment request was generated with PFLX Pay.";
     const walletAddress = "TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbzhPnamX09dY0FuVfV4cvkkmF4FC9zwbR4hlFvYegEK6ViSLmPRFmYmFTjqtonr5XQ/exec";
 
     document.getElementById("amount").textContent = amount + " " + currency;
     document.getElementById("currency").textContent = currency;
@@ -386,11 +387,38 @@
       });
     }
 
-    function markAsPaid() {
+    async function markAsPaid() {
       const ref = "PFLX-" + Date.now();
-      document.getElementById("statusBox").style.display = "block";
-      document.getElementById("referenceId").textContent = "Reference ID: " + ref;
-      document.getElementById("statusBox").scrollIntoView({ behavior: "smooth" });
+
+      const payload = {
+        reference: ref,
+        amount: amount,
+        currency: currency,
+        title: title,
+        description: description,
+        wallet: walletAddress
+      };
+
+      try {
+        const response = await fetch(scriptUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          document.getElementById("statusBox").style.display = "block";
+          document.getElementById("referenceId").textContent = "Reference ID: " + ref;
+          document.getElementById("copyMessage").textContent = "✅ Payment notification sent.";
+          document.getElementById("statusBox").scrollIntoView({ behavior: "smooth" });
+        } else {
+          document.getElementById("copyMessage").textContent = "Could not send notification. Please try again.";
+        }
+      } catch (error) {
+        document.getElementById("copyMessage").textContent = "Connection error. Please try again.";
+      }
     }
   </script>
 
