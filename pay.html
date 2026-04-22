@@ -1,78 +1,112 @@
-function doGet(e) {
-  const action = e.parameter.action || "ping";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PFLX Pay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  if (action === "ping") {
-    return ContentService
-      .createTextOutput("PFLX backend is live.")
-      .setMimeType(ContentService.MimeType.TEXT);
-  }
+<style>
+body{
+  background:#050816;
+  color:#fff;
+  font-family:Arial;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.box{
+  background:#0b1220;
+  padding:30px;
+  border-radius:20px;
+  width:420px;
+}
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+.primary{background:#2563eb;color:#fff;}
+.green{background:#22c55e;color:#fff;}
+.wallet{
+  background:#111;
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
+  word-break:break-all;
+}
+</style>
+</head>
 
-  if (action === "testwrite") {
-    const sheet = SpreadsheetApp
-      .openByUrl("https://docs.google.com/spreadsheets/d/1CGWHyks1WBfAJk7c5Ai6qaCJ9s0sCeYT1jllk856B9U/edit?gid=0#gid=0")
-      .getSheets()[0];
+<body>
 
-    const ref = "TEST-" + Date.now();
+<div class="box">
 
-    sheet.appendRow([
-      ref,
-      "100",
-      "USDT",
-      "Test Payment",
-      "Manual backend test",
-      "TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK",
-      new Date(),
-      "pending"
-    ]);
+<h2 id="title"></h2>
+<p id="desc"></p>
 
-    return ContentService
-      .createTextOutput("TEST OK: " + ref)
-      .setMimeType(ContentService.MimeType.TEXT);
-  }
+<h1 id="amount"></h1>
 
-  return ContentService
-    .createTextOutput("Unknown action")
-    .setMimeType(ContentService.MimeType.TEXT);
+<div class="wallet" id="wallet"></div>
+
+<img id="qr" width="200">
+
+<button class="primary" onclick="copy()">Copy Wallet</button>
+<button class="green" onclick="paid()">I Paid</button>
+
+<p id="msg"></p>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(location.search);
+
+const amount = params.get("amount");
+const currency = params.get("currency");
+const title = params.get("title");
+const desc = params.get("description");
+
+const wallet = "TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK";
+
+const scriptUrl = "BURAYA_SCRIPT_LINK";
+
+document.getElementById("title").innerText = title;
+document.getElementById("desc").innerText = desc;
+document.getElementById("amount").innerText = amount + " " + currency;
+document.getElementById("wallet").innerText = wallet;
+
+document.getElementById("qr").src =
+"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + wallet;
+
+function copy(){
+  navigator.clipboard.writeText(wallet);
+  document.getElementById("msg").innerText="Copied";
 }
 
-function doPost(e) {
-  try {
-    const sheet = SpreadsheetApp
-      .openByUrl("https://docs.google.com/spreadsheets/d/1CGWHyks1WBfAJk7c5Ai6qaCJ9s0sCeYT1jllk856B9U/edit?gid=0#gid=0")
-      .getSheets()[0];
+function paid(){
+  const ref = "PFLX-" + Date.now();
 
-    const data = JSON.parse(e.postData.contents);
+  fetch(scriptUrl,{
+    method:"POST",
+    mode:"no-cors",
+    body:JSON.stringify({
+      reference:ref,
+      amount:amount,
+      currency:currency,
+      title:title,
+      description:desc,
+      wallet:wallet
+    })
+  });
 
-    sheet.appendRow([
-      data.reference || "",
-      data.amount || "",
-      data.currency || "",
-      data.title || "",
-      data.description || "",
-      data.wallet || "",
-      new Date(),
-      "pending"
-    ]);
-
-    MailApp.sendEmail({
-      to: Session.getActiveUser().getEmail(),
-      subject: "🚀 New Payment - PFLX",
-      body:
-        "Reference: " + (data.reference || "") + "\n" +
-        "Amount: " + (data.amount || "") + "\n" +
-        "Currency: " + (data.currency || "") + "\n" +
-        "Title: " + (data.title || "") + "\n" +
-        "Description: " + (data.description || "") + "\n" +
-        "Wallet: " + (data.wallet || "")
-    });
-
-    return ContentService
-      .createTextOutput(JSON.stringify({ ok: true }))
-      .setMimeType(ContentService.MimeType.JSON);
-
-  } catch (err) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ ok: false, error: String(err) }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
+  document.getElementById("msg").innerText="Payment sent ✔";
 }
+
+</script>
+
+</body>
+</html>
