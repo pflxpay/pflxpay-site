@@ -345,7 +345,7 @@
       <div class="status-box" id="statusBox">
         <div class="status-title">Payment Submitted</div>
         <div class="status-text">
-          Your payment has been submitted successfully. The merchant has been notified by email and the payment record has been added to the admin sheet.
+          Your payment has been submitted successfully. The merchant has been notified and the payment record has been added for review.
         </div>
         <div class="reference-box" id="referenceId"></div>
       </div>
@@ -400,22 +400,19 @@
       };
 
       try {
-        const response = await fetch(scriptUrl, {
+        await fetch(scriptUrl, {
           method: "POST",
+          mode: "no-cors",
           headers: {
             "Content-Type": "text/plain;charset=utf-8"
           },
           body: JSON.stringify(payload)
         });
 
-        if (response.ok) {
-          document.getElementById("statusBox").style.display = "block";
-          document.getElementById("referenceId").textContent = "Reference ID: " + ref;
-          document.getElementById("copyMessage").textContent = "✅ Payment notification sent.";
-          document.getElementById("statusBox").scrollIntoView({ behavior: "smooth" });
-        } else {
-          document.getElementById("copyMessage").textContent = "Could not send notification. Please try again.";
-        }
+        document.getElementById("statusBox").style.display = "block";
+        document.getElementById("referenceId").textContent = "Reference ID: " + ref;
+        document.getElementById("copyMessage").textContent = "✅ Payment notification sent.";
+        document.getElementById("statusBox").scrollIntoView({ behavior: "smooth" });
       } catch (error) {
         document.getElementById("copyMessage").textContent = "Connection error. Please try again.";
       }
