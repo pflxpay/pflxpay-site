@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PFLX Admin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#050816;color:#fff}
+.header{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo img{height:60px}
+a{color:#93c5fd;text-decoration:none}
+.container{max-width:1100px;margin:40px auto;padding:0 20px}
+h1{margin-bottom:10px}
+p{color:#94a3b8;margin-bottom:24px}
+.card{background:#0b1220;border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:20px;margin-bottom:16px}
+.top{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:14px}
+.ref{color:#93c5fd;font-weight:bold}
+.status{padding:7px 12px;border-radius:999px;background:rgba(37,99,235,.16);color:#93c5fd;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.item{background:#08101d;border-radius:12px;padding:12px}
+.label{font-size:12px;color:#94a3b8;margin-bottom:6px}
+.value{word-break:break-all}
+.actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+button{border:none;border-radius:10px;padding:10px 14px;cursor:pointer;color:white}
+.confirm{background:#22c55e}
+.reject{background:#ef4444}
+.delete{background:#334155}
+.clear{background:#ef4444;margin-bottom:20px}
+.empty{background:#0b1220;padding:30px;border-radius:20px;color:#94a3b8;text-align:center}
+@media(max-width:768px){.header{flex-direction:column;gap:15px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><img src="logo.png" alt="PFLX Pay"></div>
+  <a href="index.html">← Back to site</a>
+</div>
+
+<div class="container">
+  <h1>Admin Panel</h1>
+  <p>Payment submissions from MVP demo are listed here.</p>
+
+  <button class="clear" onclick="clearAll()">Clear All Payments</button>
+
+  <div id="list"></div>
+</div>
+
+<script>
+function loadPayments(){
+  const list=document.getElementById("list");
+  const payments=JSON.parse(localStorage.getItem("pflx_payments")||"[]");
+
+  if(payments.length===0){
+    list.innerHTML='<div class="empty">No payment submissions yet.</div>';
+    return;
+  }
+
+  list.innerHTML=payments.map((p,i)=>`
+    <div class="card">
+      <div class="top">
+        <div class="ref">${p.reference}</div>
+        <div class="status">${p.status}</div>
+      </div>
+
+      <div class="grid">
+        <div class="item"><div class="label">Amount</div><div class="value">${p.amount} ${p.currency}</div></div>
+        <div class="item"><div class="label">Date</div><div class="value">${p.date}</div></div>
+        <div class="item"><div class="label">Title</div><div class="value">${p.title}</div></div>
+        <div class="item"><div class="label">Wallet</div><div class="value">${p.wallet}</div></div>
+        <div class="item" style="grid-column:1/-1"><div class="label">Description</div><div class="value">${p.description}</div></div>
+      </div>
+
+      <div class="actions">
+        <button class="confirm" onclick="setStatus(${i},'confirmed')">Confirm</button>
+        <button class="reject" onclick="setStatus(${i},'rejected')">Reject</button>
+        <button class="delete" onclick="deletePayment(${i})">Delete</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function setStatus(index,status){
+  let payments=JSON.parse(localStorage.getItem("pflx_payments")||"[]");
+  payments[index].status=status;
+  localStorage.setItem("pflx_payments",JSON.stringify(payments));
+  loadPayments();
+}
+
+function deletePayment(index){
+  let payments=JSON.parse(localStorage.getItem("pflx_payments")||"[]");
+  payments.splice(index,1);
+  localStorage.setItem("pflx_payments",JSON.stringify(payments));
+  loadPayments();
+}
+
+function clearAll(){
+  if(confirm("Clear all payments?")){
+    localStorage.removeItem("pflx_payments");
+    loadPayments();
+  }
+}
+
+loadPayments();
+</script>
+
+</body>
+</html>
