@@ -1,6 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PFLX Admin</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#050816;color:#fff}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-box{width:100%;max-width:380px;background:#0b1220;border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:26px;text-align:center}
+.login-box img{height:60px;margin-bottom:20px}
+.login-box h2{margin-bottom:10px}
+.login-box p{color:#94a3b8;margin-bottom:20px}
+.login-box input{width:100%;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#050816;color:#fff;margin-bottom:12px}
+.login-box button{width:100%;padding:14px;border:none;border-radius:12px;background:#2563eb;color:#fff;cursor:pointer}
+.error{color:#ef4444;margin-top:12px;min-height:20px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo img{height:60px}
+a{color:#93c5fd;text-decoration:none}
+.container{max-width:1100px;margin:40px auto;padding:0 20px}
+h1{margin-bottom:10px}
+p{color:#94a3b8;margin-bottom:24px}
+.card{background:#0b1220;border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:20px;margin-bottom:16px}
+.top{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:14px}
+.ref{color:#93c5fd;font-weight:bold}
+.status{padding:7px 12px;border-radius:999px;background:rgba(37,99,235,.16);color:#93c5fd;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.item{background:#08101d;border-radius:12px;padding:12px}
+.label{font-size:12px;color:#94a3b8;margin-bottom:6px}
+.value{word-break:break-all}
+.actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+button{border:none;border-radius:10px;padding:10px 14px;cursor:pointer;color:white}
+.confirm{background:#22c55e}
+.reject{background:#ef4444}
+.delete{background:#334155}
+.logout{background:#334155}
+.empty{background:#0b1220;padding:30px;border-radius:20px;color:#94a3b8;text-align:center}
+#adminApp{display:none}
+@media(max-width:768px){.header{flex-direction:column;gap:15px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<div class="login" id="loginScreen">
+  <div class="login-box">
+    <img src="logo.png" alt="PFLX Pay">
+    <h2>Admin Login</h2>
+    <p>Enter password to access payment submissions.</p>
+    <input type="password" id="passwordInput" placeholder="Admin password">
+    <button onclick="login()">Login</button>
+    <div class="error" id="loginError"></div>
+  </div>
+</div>
+
+<div id="adminApp">
+  <div class="header">
+    <div class="logo"><img src="logo.png" alt="PFLX Pay"></div>
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+      <a href="index.html">← Back to site</a>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Admin Panel</h1>
+    <p>Live payment submissions from Firebase are listed here.</p>
+    <div id="list"><div class="empty">Loading payments...</div></div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const ADMIN_PASSWORD = "pflxadmin2026";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0XWD2SKcNbxCtm5xCgjMN2rASkDHddzU",
@@ -14,48 +89,88 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 const list = document.getElementById("list");
 
-function render(data){
-  if(!data){
-    list.innerHTML = "<div class='empty'>No payments yet</div>";
-    return;
+window.login = function(){
+  const password = document.getElementById("passwordInput").value;
+  const error = document.getElementById("loginError");
+
+  if(password === ADMIN_PASSWORD){
+    sessionStorage.setItem("pflx_admin_auth","true");
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("adminApp").style.display="block";
+    loadPayments();
+  }else{
+    error.textContent="Wrong password.";
   }
-
-  list.innerHTML = Object.entries(data).map(([id,p]) => `
-    <div class="card">
-      <div class="top">
-        <div class="ref">${p.reference}</div>
-        <div class="status">${p.status}</div>
-      </div>
-
-      <div class="grid">
-        <div class="item"><div class="label">Amount</div><div>${p.amount} ${p.currency}</div></div>
-        <div class="item"><div class="label">Date</div><div>${p.date}</div></div>
-        <div class="item"><div class="label">Title</div><div>${p.title}</div></div>
-        <div class="item"><div class="label">Wallet</div><div>${p.wallet}</div></div>
-        <div class="item" style="grid-column:1/-1"><div class="label">Description</div><div>${p.description}</div></div>
-      </div>
-
-      <div class="actions">
-        <button class="confirm" onclick="setStatus('${id}','confirmed')">Confirm</button>
-        <button class="reject" onclick="setStatus('${id}','rejected')">Reject</button>
-        <button class="delete" onclick="deletePayment('${id}')">Delete</button>
-      </div>
-    </div>
-  `).join("");
 }
 
-onValue(ref(db, "payments"), snapshot => {
-  render(snapshot.val());
-});
+window.logout = function(){
+  sessionStorage.removeItem("pflx_admin_auth");
+  location.reload();
+}
+
+function checkAuth(){
+  const loggedIn = sessionStorage.getItem("pflx_admin_auth") === "true";
+  if(loggedIn){
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("adminApp").style.display="block";
+    loadPayments();
+  }
+}
+
+function loadPayments(){
+  onValue(ref(db, "payments"), snapshot => {
+    const data = snapshot.val();
+
+    if(!data){
+      list.innerHTML = '<div class="empty">No payments yet.</div>';
+      return;
+    }
+
+    const payments = Object.entries(data).reverse();
+
+    list.innerHTML = payments.map(([id,p]) => `
+      <div class="card">
+        <div class="top">
+          <div class="ref">${p.reference || ""}</div>
+          <div class="status">${p.status || "pending"}</div>
+        </div>
+
+        <div class="grid">
+          <div class="item"><div class="label">Amount</div><div class="value">${p.amount || ""} ${p.currency || ""}</div></div>
+          <div class="item"><div class="label">Date</div><div class="value">${p.date || ""}</div></div>
+          <div class="item"><div class="label">Title</div><div class="value">${p.title || ""}</div></div>
+          <div class="item"><div class="label">Wallet</div><div class="value">${p.wallet || ""}</div></div>
+          <div class="item" style="grid-column:1/-1"><div class="label">Description</div><div class="value">${p.description || ""}</div></div>
+        </div>
+
+        <div class="actions">
+          <button class="confirm" onclick="setStatus('${id}','confirmed')">Confirm</button>
+          <button class="reject" onclick="setStatus('${id}','rejected')">Reject</button>
+          <button class="delete" onclick="deletePayment('${id}')">Delete</button>
+        </div>
+      </div>
+    `).join("");
+  });
+}
 
 window.setStatus = function(id,status){
-  update(ref(db, "payments/"+id), { status });
-};
+  update(ref(db, "payments/" + id), { status: status });
+}
 
 window.deletePayment = function(id){
-  remove(ref(db, "payments/"+id));
-};
+  if(confirm("Delete this payment?")){
+    remove(ref(db, "payments/" + id));
+  }
+}
+
+document.getElementById("passwordInput").addEventListener("keydown", function(e){
+  if(e.key === "Enter") login();
+});
+
+checkAuth();
 </script>
+
+</body>
+</html>
