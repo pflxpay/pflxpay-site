@@ -1,3 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PFLX Pay - Payment</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#050816;color:#fff;min-height:100vh}
+.topbar{text-align:center;padding:24px 20px 10px}
+.topbar img{height:64px}
+.wrapper{max-width:760px;margin:30px auto 60px;padding:0 20px}
+.card{background:#0b1220;border:1px solid rgba(255,255,255,.06);border-radius:24px;padding:32px}
+.badge{display:inline-block;background:rgba(37,99,235,.16);color:#93c5fd;padding:8px 12px;border-radius:999px;margin-bottom:18px}
+h1{font-size:36px;margin-bottom:14px}
+.desc{color:#94a3b8;line-height:1.7;margin-bottom:24px}
+.amount-box,.wallet-box,.status-box{background:#08101d;border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:22px;margin-bottom:22px}
+.amount-label{color:#94a3b8;margin-bottom:10px}
+.amount{font-size:40px;font-weight:bold}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.meta-card{background:#08101d;border-radius:18px;padding:18px;border:1px solid rgba(255,255,255,.06)}
+.meta-label{color:#94a3b8;font-size:13px;margin-bottom:8px}
+.wallet{background:#050816;color:#93c5fd;padding:14px;border-radius:12px;word-break:break-all;margin:12px 0}
+.qr{text-align:center;background:#050816;border-radius:18px;padding:18px;margin-top:18px}
+.qr img{width:220px;height:220px;background:#fff;padding:10px;border-radius:12px}
+.note{color:#94a3b8;font-size:14px;line-height:1.6;margin-top:14px}
+.buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+button,a{padding:14px 20px;border:none;border-radius:12px;text-decoration:none;cursor:pointer;font-size:15px}
+.primary{background:#2563eb;color:white}
+.green{background:#22c55e;color:white}
+.secondary{background:rgba(255,255,255,.06);color:white;border:1px solid rgba(255,255,255,.1)}
+.msg{color:#22c55e;margin-top:14px}
+.status-box{display:none}
+.ref{background:#050816;color:#93c5fd;border-radius:12px;padding:14px;word-break:break-all;margin-top:12px}
+.footer{text-align:center;color:#64748b;padding:20px}
+@media(max-width:768px){.card{padding:22px}.meta{grid-template-columns:1fr}.buttons{flex-direction:column}button,a{width:100%;text-align:center}.qr img{width:180px;height:180px}}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <img src="logo.png" alt="PFLX Pay">
+</div>
+
+<div class="wrapper">
+  <div class="card">
+    <div class="badge">TRC20 Payment Request</div>
+
+    <h1 id="title">Payment Request</h1>
+    <p class="desc" id="description">This payment request was generated with PFLX Pay.</p>
+
+    <div class="amount-box">
+      <div class="amount-label">Amount to pay</div>
+      <div class="amount" id="amount">0 USDT</div>
+    </div>
+
+    <div class="meta">
+      <div class="meta-card">
+        <div class="meta-label">Currency</div>
+        <div id="currency">USDT</div>
+      </div>
+
+      <div class="meta-card">
+        <div class="meta-label">Network</div>
+        <div>TRC20 (TRON)</div>
+      </div>
+    </div>
+
+    <div class="wallet-box">
+      <h3>Send payment to wallet</h3>
+
+      <div class="wallet" id="walletAddress">
+        TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK
+      </div>
+
+      <div class="qr">
+        <img id="qrImage" src="" alt="QR Code">
+        <div class="note">Scan this QR code to copy the wallet address faster in supported apps.</div>
+      </div>
+
+      <div class="buttons">
+        <button class="primary" onclick="copyWallet()">Copy Wallet Address</button>
+        <button class="green" onclick="markAsPaid()">I Paid</button>
+        <a href="index.html" class="secondary">Create Another Link</a>
+      </div>
+
+      <div class="msg" id="copyMessage"></div>
+    </div>
+
+    <div class="status-box" id="statusBox">
+      <h3>Payment Submitted</h3>
+      <p class="desc">Your payment has been submitted. Please save your reference ID.</p>
+      <div class="ref" id="referenceId"></div>
+    </div>
+
+    <p class="note">Please send the exact amount using the TRC20 network only.</p>
+  </div>
+</div>
+
+<div class="footer">PFLX Pay © 2026</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -15,43 +118,48 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const params=new URLSearchParams(window.location.search);
-const amount=params.get("amount")||"0";
-const currency=params.get("currency")||"USDT";
-const title=params.get("title")||"Payment Request";
-const description=params.get("description")||"";
-const walletAddress="TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK";
+const params = new URLSearchParams(window.location.search);
 
-document.getElementById("amount").textContent=amount+" "+currency;
-document.getElementById("currency").textContent=currency;
-document.getElementById("title").textContent=title;
-document.getElementById("description").textContent=description;
-document.getElementById("walletAddress").textContent=walletAddress;
+const amount = params.get("amount") || "0";
+const currency = params.get("currency") || "USDT";
+const title = params.get("title") || "Payment Request";
+const description = params.get("description") || "This payment request was generated with PFLX Pay.";
+const walletAddress = "TQ71h8FKQXrFfDrRw4N2WqdEm4YesWWCAK";
 
-document.getElementById("qrImage").src=
-"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="+encodeURIComponent(walletAddress);
+document.getElementById("amount").textContent = amount + " " + currency;
+document.getElementById("currency").textContent = currency;
+document.getElementById("title").textContent = title;
+document.getElementById("description").textContent = description;
+document.getElementById("walletAddress").textContent = walletAddress;
+
+document.getElementById("qrImage").src =
+  "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(walletAddress);
 
 window.copyWallet = function(){
   navigator.clipboard.writeText(walletAddress);
-  document.getElementById("copyMessage").textContent="✅ Wallet copied.";
-}
+  document.getElementById("copyMessage").textContent = "✅ Wallet address copied.";
+};
 
-window.markAsPaid = function(){
+window.markAsPaid = async function(){
   const refId = "PFLX-" + Date.now();
 
-  push(ref(db, "payments"), {
+  await push(ref(db, "payments"), {
     reference: refId,
-    amount,
-    currency,
-    title,
-    description,
+    amount: amount,
+    currency: currency,
+    title: title,
+    description: description,
     wallet: walletAddress,
     date: new Date().toLocaleString(),
     status: "pending"
   });
 
-  document.getElementById("statusBox").style.display="block";
-  document.getElementById("referenceId").textContent="Reference ID: " + refId;
-  document.getElementById("copyMessage").textContent="✅ Payment sent!";
-}
+  document.getElementById("statusBox").style.display = "block";
+  document.getElementById("referenceId").textContent = "Reference ID: " + refId;
+  document.getElementById("copyMessage").textContent = "✅ Payment submitted to Firebase.";
+  document.getElementById("statusBox").scrollIntoView({behavior:"smooth"});
+};
 </script>
+
+</body>
+</html>
