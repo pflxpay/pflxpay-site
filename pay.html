@@ -118,6 +118,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+const TELEGRAM_BOT_TOKEN = "8456758780:AAFEK7znpQDXGhbheOBHmXEqlTdG0P192Hw";
+const TELEGRAM_CHAT_ID = "8039484362";
+
 const params = new URLSearchParams(window.location.search);
 
 const amount = params.get("amount") || "0";
@@ -140,30 +143,23 @@ window.copyWallet = function(){
   document.getElementById("copyMessage").textContent = "✅ Wallet address copied.";
 };
 
+async function sendTelegramMessage(text){
+  await fetch("https://api.telegram.org/bot" + TELEGRAM_BOT_TOKEN + "/sendMessage", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: text
+    })
+  });
+}
+
 window.markAsPaid = async function(){
   const refId = "PFLX-" + Date.now();
 
-  await push(ref(db, "payments"), {
-// TELEGRAM GÖNDER
-fetch("https://api.telegram.org/bot8456758780:AAFEK7znpQDXGhbheOBHmXEqlTdG0P192Hw/sendMessage", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    chat_id: "8039484362",
-    text:
-`💰 NEW PAYMENT
-
-Amount: ${amount} ${currency}
-Title: ${title}
-Desc: ${description}
-
-Wallet: ${walletAddress}
-
-Ref: ${refId}`
-  })
-});
+  const paymentData = {
     reference: refId,
     amount: amount,
     currency: currency,
@@ -172,12 +168,34 @@ Ref: ${refId}`
     wallet: walletAddress,
     date: new Date().toLocaleString(),
     status: "pending"
-  });
+  };
 
-  document.getElementById("statusBox").style.display = "block";
-  document.getElementById("referenceId").textContent = "Reference ID: " + refId;
-  document.getElementById("copyMessage").textContent = "✅ Payment submitted to Firebase.";
-  document.getElementById("statusBox").scrollIntoView({behavior:"smooth"});
+  try {
+    await push(ref(db, "payments"), paymentData);
+
+    await sendTelegramMessage(
+`💰 NEW PAYMENT
+
+Amount: ${amount} ${currency}
+Title: ${title}
+Description: ${description}
+
+Wallet: ${walletAddress}
+
+Reference: ${refId}`
+    );
+
+    document.getElementById("statusBox").style.display = "block";
+    document.getElementById("referenceId").textContent = "Reference ID: " + refId;
+    document.getElementById("copyMessage").style.color = "#22c55e";
+    document.getElementById("copyMessage").textContent = "✅ Payment submitted. Admin notified.";
+    document.getElementById("statusBox").scrollIntoView({behavior:"smooth"});
+
+  } catch (error) {
+    document.getElementById("copyMessage").style.color = "#ef4444";
+    document.getElementById("copyMessage").textContent = "❌ Notification failed. Please try again.";
+    console.error(error);
+  }
 };
 </script>
 
