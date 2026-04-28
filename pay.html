@@ -144,6 +144,26 @@ window.markAsPaid = async function(){
   const refId = "PFLX-" + Date.now();
 
   await push(ref(db, "payments"), {
+// TELEGRAM GÖNDER
+fetch("https://api.telegram.org/bot8456758780:AAFEK7znpQDXGhbheOBHmXEqlTdG0P192Hw/sendMessage", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    chat_id: "8039484362",
+    text:
+`💰 NEW PAYMENT
+
+Amount: ${amount} ${currency}
+Title: ${title}
+Desc: ${description}
+
+Wallet: ${walletAddress}
+
+Ref: ${refId}`
+  })
+});
     reference: refId,
     amount: amount,
     currency: currency,
